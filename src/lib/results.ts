@@ -1,4 +1,4 @@
-import { supabase } from './supabase'
+import { getSupabase } from './supabase'
 import type { UserAnswer, QuizResult } from '@/types/quiz'
 import { LEVELS, LEVEL_LABELS, QUESTIONS_PER_LEVEL } from '@/data/questions'
 
@@ -33,12 +33,12 @@ export async function saveResult(
     badge: getBadge(total),
   }
 
-  const { error } = await supabase.from('quiz_results').insert(row)
+  const { error } = await getSupabase().from('quiz_results').insert(row)
   return { error: error?.message ?? null }
 }
 
 export async function fetchRanking(): Promise<QuizResult[]> {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('quiz_results')
     .select('*')
     .order('total_score', { ascending: false })
